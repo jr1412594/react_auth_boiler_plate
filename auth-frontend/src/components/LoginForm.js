@@ -18,7 +18,7 @@ export default function LoginForm({login, error}) {
             <label>Password</label>
             <input type="password" name="password" value={password} onChange={event => setPassword(event.target.value)} />
             {error ? <p style={{color: 'red'}}>{error}</p> : null}
-            <input type="submit" valuse="Login" />
+            <input type="submit" value="Login" />
         </form>
     )
 }

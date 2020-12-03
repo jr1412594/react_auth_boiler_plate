@@ -10,7 +10,7 @@ class ApplicationController < ActionController::API
     end
 
     def current_user
-        auth_header = request.headers["Aurhorization"]
+        auth_header = request.headers["Authorization"]
         if auth_header
             token = auth_header.split(" ")[1]
             begin

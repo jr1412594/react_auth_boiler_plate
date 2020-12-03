@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-
-export default function LoginForm({login, error}) {
+import {Link} from 'react-router-dom'
+export default function LoginForm({login, error, history}) {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
@@ -8,7 +8,7 @@ export default function LoginForm({login, error}) {
 
     const handleSubmit = event => {
         event.preventDefault()
-        login(username, password)
+        login(username, password, history)
     }
 
     return (
@@ -18,6 +18,10 @@ export default function LoginForm({login, error}) {
             <label>Password</label>
             <input type="password" name="password" value={password} onChange={event => setPassword(event.target.value)} />
             {error ? <p style={{color: 'red'}}>{error}</p> : null}
+            <p>
+                    Not registered?
+                    <Link to='/signup'>Login</Link>
+                </p>
             <input type="submit" value="Login" />
         </form>
     )

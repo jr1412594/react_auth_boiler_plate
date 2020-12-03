@@ -1,6 +1,9 @@
 import { Component } from 'react'
-import SignupForm from './components/SignupForm'
-import LoginForm from './components/LoginForm'
+import SignupForm from './pages/SignupForm'
+import LoginForm from './pages/LoginForm'
+import HomePage from './pages/HomePage'
+import PrivateRoute from './components/PrivateRoute'
+import {Route, Switch} from 'react-router-dom'
 import './App.css';
 
 const baseURL = "http://localhost:3000/"
@@ -30,6 +33,7 @@ class App extends Component {
       })
     }
   }
+
   signUp = user => {
     fetch('http://localhost:3000/users', {
       method: "POST",
@@ -50,7 +54,7 @@ class App extends Component {
     .then(user => this.setState({ user }))
   }
 
-  login = (username, password) => {
+  login = (username, password, history) => {
     fetch(baseURL + 'login', {
       method: "POST",
       headers: {
@@ -65,10 +69,11 @@ class App extends Component {
     })
     .then(response => response.json())
     .then(result => {
-      localStorage.setItem('token', result.token)
       if(result.token){
+        localStorage.setItem('token', result.token)
       this.setState({user: result.user
       })
+      history.push('/')
     } else {
       this.setState({
         error: result.error
@@ -80,16 +85,12 @@ class App extends Component {
 
     return (
       <div className="App">
-        {
-          this.state.user.username
-          ? <h2>Welcome! {this.state.user.first_name}</h2>
-          :  (
-            <>
-              <SignupForm signUp={this.signUp}/>
-              <LoginForm login={this.login} error={this.state.error}/>
-            </>
-          )
-        }
+        <Switch>
+          {/* <Route exact path='/' render={(routerProps) => <HomePage />} /> */}
+          <Route path='/signup' render={(routerProps) => <SignupForm signUp={this.signUp} {...routerProps}/>} />
+          <Route path='/login' render={(routerProps) => <LoginForm login={this.login} error={this.state.error} {...routerProps}/>} />
+          <PrivateRoute path='/' component={HomePage} user={this.state.user} />
+        </Switch>
       </div>
     );
   }
